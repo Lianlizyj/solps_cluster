@@ -5,11 +5,26 @@ cpu | cut -d ' ' -f 1,4 | cat > time_list
 sed -i '1d'  time_list # 删除第一行
 sed -i '$d' time_list # 删除最后一行
 sed -i '/Total/d' time_list # 删除含‘Total’的一行
-echo "step1"
 sum=`cat time_list | awk '{sum+=$2}END{print sum}'`
-echo ${sum} # 测试是否正确
+#echo "${sum}" # 测试是否正确
 n_total=`tail -n 1 time_list | awk '{print $1}'`
-echo ${n_total}
 ave=`echo "scale=3;${sum} / ${n_total}"| bc`
-echo ${ave}
+echo "============================================"
+echo "     已运行${n_total}步，平均每步运行时间${ave}秒。"
 rm time_list >& /dev/null
+sum_n=`grep ntim b2mn.dat | awk '{print $2}'`
+sum_n=${sum_n:1:-1} # get the total step
+n_left=`echo "${sum_n} - ${n_total}"|bc`
+time_left=`echo "scale=3;${n_left} * ${ave} / 3600"|bc`
+tim=$(date "+%Y-%m-%d %H:%M:%S")
+echo "     当前时间：${tim}。"
+time_d=`echo "${n_left} * ${ave} / 3600 / 24"|bc`
+time_h=`echo "(${n_left} * ${ave} - 3600 * 24 * ${time_d}) / 3600"|bc`
+time_m=`echo "(${n_left} * ${ave} - 3600 * 24 * ${time_d} - ${time_h} * 3600) / 60"|bc`
+time1=$(date +%s -d "${tim}")
+time2=`echo "${n_left} * ${ave}"|bc`
+time1=`echo "${time1} + ${time2}"|bc`
+time1=$(date +%Y-%m-%d\ %H:%M:%S -d"1970-01-01 UTC $time1 seconds");
+echo "     剩余${n_left}步，需运行时间${time_d}天${time_h}小时${time_m}分 "
+echo "     预计$time1 运行完毕！"
+echo "============================================"
