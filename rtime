@@ -1,0 +1,15 @@
+#!/bin/bash 
+
+# calculate the average time
+cpu | cut -d ' ' -f 1,4 | cat > time_list
+sed -i '1d'  time_list # 删除第一行
+sed -i '$d' time_list # 删除最后一行
+sed -i '/Total/d' time_list # 删除含‘Total’的一行
+echo "step1"
+sum=`cat time_list | awk '{sum+=$2}END{print sum}'`
+echo ${sum} # 测试是否正确
+n_total=`tail -n 1 time_list | awk '{print $1}'`
+echo ${n_total}
+ave=`echo "scale=3;${sum} / ${n_total}"| bc`
+echo ${ave}
+rm time_list >& /dev/null

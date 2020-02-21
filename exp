@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# ============== get all of the input var and save them in a file =============== #
+path=`pwd` # get the current path
+echo ${path}
+pp="${path}/parameter_list" # absolute path
+rm parameter_list # update the parameter list
+for i in $*
+do
+	# deviding the input number
+	mid=`echo "${i} * 10^6"|bc`
+	echo "${mid}"
+	pe=`echo "scale=1;${mid} / 2"|bc` 
+        printf "%1.3E %s \n" ${pe} ${i} | cat >> ${pp}
+done

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# function: copy file to a serious of directory which in a commom father dir
+
+# =================== get the file name which is copy source======== #
+fn=${1}
+
+# =================== get the base path for file =================== #
+basen=`pwd`
+
+# ================ get the father dir name ========================= #
+dn=${2}
+fp="${basen}/${fn}"
+echo "${fp}"
+
+# ================= scan the case file to handle the file ========== #
+for file in ${dn}/*
+do
+	if [ -d $file ]
+	then
+#		cd ${file} # enter the sub-dir for callbacking scripts
+		cp ${fp} ${file}
+		echo "`basename ${file}` have completed!" 
+
+	fi
+done

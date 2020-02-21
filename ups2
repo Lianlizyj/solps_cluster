@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# function: read downstream profile, and compare with different file.
+# input: the directory name,which you want to compare
+# output: the multiplot figure
+# example:
+# gn2 3MW/ cflmi/
+
+# =========== get the current path ====================#
+fp=`pwd`
+# Thanks for interactive shell,we get the directory name 
+# ${1} specify the first input variable, ${n} is similar
+
+# ============ catch the path,which is used for plot====#
+pp1="${fp}/${1}" 
+pp2="${fp}/${2}"
+#echo "${pp1}"
+
+# =============== get the basename for legend ==========#
+leg1=${1}
+leg2=${2}
+
+# ============== gnuplot function =====================#
+
+echo "
+set term post eps color solid enh
+set output 'ups2.eps'
+
+set multiplot title 'upstream profiles' layout 3,2
+
+plot '${pp1}te3di.last10' w l t '${leg1}te3di','${pp2}te3di.last10' w l t '${leg2}
+plot '${pp1}te3da.last10' w l t '${leg1}te3da','${pp2}te3da.last10' w l t '${leg2}
+
+plot '${pp1}ne3di.last10' w l t '${leg1}ne3di','${pp2}ne3di.last10' w l t '${leg2}
+plot '${pp1}ne3da.last10' w l t '${leg1}ne3da','${pp2}ne3da.last10' w l t '${leg2}
+
+plot '${pp1}ti3di.last10' w l t '${leg1}ti3di','${pp2}ti3di.last10' w l t '${leg2}
+plot '${pp1}ti3da.last10' w l t '${leg1}ti3da','${pp2}ti3da.last10' w l t '${leg2}
+
+unset multiplot
+" | gnuplot
+echo "upstream profiles is saved as ups2.eps!"

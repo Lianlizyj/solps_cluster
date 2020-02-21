@@ -1,0 +1,26 @@
+
+echo "aspc 2.0 lbsz -26 font 1.0 rmin 1.8 rmax -1.4 zmin -0.8 zmax '' extl 5 vcol 3.0 vwid vesl 8 ocol 1.0 owid outl 16 scol 5.0 sepw sep phys 2 mcol 0.6 mwid mesh surf" | b2plot;
+mv b2plot.ps Phys_mesh_target.ps
+evince Phys_mesh_target.ps
+
+echo "aspc 2.0 lbsz -26 font 1.0 rmin 1.8 rmax -1.4 zmin -0.8 zmax 'Outer target' extl vesl outl sep phys ne 1.0e19 fmin 1.0e21 fmax logf surf" | b2plot;
+mv b2plot.ps ne_outer.ps
+evince ne_outer.ps
+
+echo "aspc 2.0 lbsz -26 font 1.0 rmin 1.8 rmax -1.4 zmin -0.8 zmax 'Outer target' extl vesl outl sep phys te 1.0 fmin 1.0e2 fmax logf surf" | b2plot;
+mv b2plot.ps te_outer.ps
+evince te_outer.ps
+
+echo "aspc 2.0 lbsz -26 font 1.0 rmin 1.8 rmax -1.4 zmin -0.8 zmax 'Outer target' extl vesl outl sep phys dab2 0 0 zrng 1.0e18 fmin 1.0e21 fmax logf surf" | b2plot;
+mv b2plot.ps dab2_D_outer.ps
+evince dab2_D_outer.ps
+
+echo "aspc 2.0 lbsz -26 font 1.0 rmin 1.8 rmax -1.4 zmin -0.8 zmax 'Outer target' extl vesl outl sep phys dmb2 0 0 zrng 1.0e18 fmin 1.0e21 fmax logf surf" | b2plot;
+mv b2plot.ps dmb2_outer.ps
+evince dmb2_outer.ps
+
+
+echo "aspc 2.0 lbsz -26 font 1.0 rmin 1.8 rmax -1.4 zmin -0.8 zmax 'Total power radiation density (W/m^{3})' extl vesl outl sep phys brna 0.0 rmma pot m* 0 0 sumz ev rm* -1.0 rm* brhe m- b2ra 0 0 sumz m+ b2br 0 0 sumz m+ pvol 9 1.0e4 3.0e4 9.0e4 3.0e5 9.0e5 3.0e6 9.0e6 3.0e7 1.0e8 8 clvs surf" | b2plot;
+mv b2plot.ps Prad_OT.ps
+evince Prad_OT.ps
+

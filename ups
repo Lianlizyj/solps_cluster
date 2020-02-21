@@ -1,0 +1,33 @@
+#!bin/bash
+#echo '
+#set term postscript eps enhanced
+#set output "enhanced.eps"
+
+#set style data linespoints
+#set key top right
+#set xlabel "r-r_{sep}(m)"
+#set ylabel "ft3dr"
+#plot "ft3dr.last10"
+#' | gnuplot
+echo '
+ 
+set term post eps color solid enh
+set output "ups.eps"
+
+set multiplot title "upstream profiles" layout 2,2
+
+plot "te3di.last10"   w l, "ti3di.last10" w l
+plot "te3da.last10"   w l, "ti3da.last10" w l
+
+plot "ne3di.last10" w l
+plot "ne3da.last10" w l
+
+#plot "ft3di.last10"  w l
+#plot "ft3da.last10"  w l
+
+#plot "fn3di.last10"  w l
+#plot "fn3da.last10"  w l
+
+unset multiplot
+' | gnuplot
+

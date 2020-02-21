@@ -1,0 +1,75 @@
+#!/bin/bash
+
+#path=$SOLPSWORK/demos/no-impurity
+#path=$SOLPSWORK/demos/no-impurity
+#path=$SOLPSWORK/demos/no-impurity
+#path=$SOLPSWORK/demos/no-impurity
+#path=$SOLPSWORK/demos/modify/c_scan
+#path=/home/zhangyanjie/solps-iter/NewSOLPSITER201903/solps-iter/runs/demos/modify/ne_gas/case/location
+#path=/home/zhangyanjie/solps-iter/NewSOLPSITER201903/solps-iter/runs/demos/mc_scan
+#path=$SOLPSWORK/demos/modify/mc_scan
+#path=$SOLPSWORK/demos/modify/d_scan
+#path=$SOLPSWORK/demos/modify/D_scan
+#path=$SOLPSWORK/demos/modify/mod_leakage
+#path='/home/zhangyanjie/solps-iter/NewSOLPSITER201903/solps-iter/runs/demos/modify/crash/ne_gas/ne_scan'
+#path='/home/zhangyanjie/solps-iter/NewSOLPSITER201903/solps-iter/runs/demos/modify/crash/c_scan'
+path=${1}
+#path=/home/zhangyanjie/solps-iter/NewSOLPSITER201903/solps-iter/runs/demos/modify/ne_gas/case/snowflake
+#path=/home/zhangyanjie/solps-iter/NewSOLPSITER201903/solps-iter/runs/demos/modify/pow_scan
+for file in $path/*
+do
+	if [ -d $file ]
+	then
+		cd ${file}
+	#	most_data
+	#	zc_script
+		2d_profiles
+#echo write phys b2ra b2br m+ abs 0 0 sumz neutrad abs 0 0 sumz m+ sumx sumy 59 f.y | b2plot ;mv  b2pl.exe.dir/b2plot.write 2D_data/rad_tot_spe_w.last10
+
+#echo write phys b2ra b2br m+ abs 0 1 sumz neutrad abs 0 zsel m+ sumx sumy 59 f.y | b2plot ;mv  b2pl.exe.dir/b2plot.write 2D_data/rad_d_w.last10
+
+#echo write phys b2ra b2br m+ abs 2 8 sumz neutrad  abs 1 zsel m+ sumx sumy 59 f.y | b2plot ;mv  b2pl.exe.dir/b2plot.write 2D_data/rad_c_w.last10
+		#echo write phys eirc na 2 8 sumz 39 f.y | b2plot ;mv  b2pl.exe.dir/b2plot.write 2D_data/nc_imp_w.last10
+ 		#echo write phys eirc na 9 19 sumz 39 f.y | b2plot ;mv  b2pl.exe.dir/b2plot.write 2D_data/nne_imp_w.last10
+ 		#echo write phys eirc na 2 8 sumz -1 f.y | b2plot ;mv  b2pl.exe.dir/b2plot.write 2D_data/nc_it_w.last10
+		#echo write phys eirc na 9 19 sumz -1 f.y | b2plot ;mv  b2pl.exe.dir/b2plot.write 2D_data/nne_it_w.last10i
+		#echo "write phys eirc na 1 zsel -1 f.y " | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/Di_it_w.last10
+ 		#echo "write phys eirc dab2 0 zsel -1 f.y " | b2plot; mv b2pl.exe.dir/b2plot.write 2D_data/nD_it_w.last10
+ 		#echo "write phys eirc dmb2 0 zsel -1 f.y " | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/nD2_it_w.last10
+#		echo write phys fhtx 0 8 sumz psxperp pit m/ abs eabs -1 f.y  | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/q_par_density_it_w.last10
+#		echo write phys fnax 0 8 sumz psxperp pit m/ abs eabs -1 f.y  | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/flux_par_density_it_w.last10
+	fi
+done
+		#echo "write phys eirc na 2 8 sumz sumx sumy jxa f.y " | b2plot;
+ 	#mv b2pl.exe.dir/b2plot.write    2D_data/c_comp_w.last10
+	#dmb2_ot	
+	#echo "write phys eirc na 0 0 sumz sumx sumy jxa f.y " | b2plot;
+	#mv b2pl.exe.dir/b2plot.write    2D_data/tot_comp_w.last10 	
+	#echo write phys fnax 1 zsel psx abs eabs 96 f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/flux_pol_density_ot_w.last10
+	#echo write phys fnax 1 zsel psxperp pit m/ abs eabs 96 f.y  | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/flux_par_density_ot_w.last10
+	#mkdir lambda
+	#echo write phys fhtx 1 zsel psxperp pit m/ 72 abs f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/ftd_w.last10
+	#echo write phys fhtx 1 zsel psxperp pit m/ 59 abs f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/ftp_w.last10
+	#	b2run b2uf
+	#	rm -r profiles_data/
+	#	profiles_data
+	#	2d_profiles
+	#	2d_profiles_extended
+	#	echo "writ phys fnax 1 zsel psxperp pit m/ -1 f.y " | b2plot;
+	#	mv b2pl.exe.dir/b2plot.write fpo.last10; mv fpo.last10 profiles_data/ 
+	#	if [ $1=fpo ]
+	#	then
+	#		echo -n `basename $file:   `    `cat ${file}/${1}.last10 | sed '/S/d' | sort -g -k2 | head -n1`
+	#		echo `\n`	
+		#	echo ${1}
+	#	else
+	#		echo -n `basename $file:    `  `cat ${file}/${1}.last10 | sort -nr -k2 | head -n1`
+	#		echo "\n"
+		#	echo ${1}
+	#	fi
+		#echo "============================== 我是底线 ===========================================
+ 
+# | grep $2 | sort -n -k1 | tee $SOLPSWORK/demos/run_state_${2}
+#echo "=================================== jstat ======================================="
+#echo "writ phys fnax 1 zsel psxperp pit m/ -1 f.y " | b2plot;
+#mv b2pl.exe.dir/b2plot.write fpo.last10 

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# function : copy the file to specified location
+
+scp -rp $1 zhangyanjie@192.168.1.131:solps-iter/NewSOLPSITER201903/solps-iter/runs/new_vesion/$2

@@ -1,0 +1,33 @@
+#!bin/bash
+#echo '
+#set term postscript eps enhanced
+#set output "enhanced.eps"
+
+#set style data linespoints
+#set key top right
+#set xlabel "r-r_{sep}(m)"
+#set ylabel "ft3dr"
+#plot "ft3dr.last10"
+#' | gnuplot
+echo '
+ 
+set term post eps color solid enh
+set output "base.eps"
+
+set multiplot title "main information" layout 4,2
+
+plot "te3dl.last10" w l 
+plot "te3dr.last10" w l
+
+plot "ne3dl.last10" w l
+plot "ne3dr.last10" w l
+
+plot "ft3dl.last10"  w l
+plot "ft3dr.last10"  w l
+
+plot "fn3dl.last10"  w l
+plot "fn3dr.last10"  w l
+
+unset multiplot
+' | gnuplot
+

@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# function: prepare the.last10 for calculating the sputering
+
+mkdir 2D_data;
+
+	# f_perp
+echo "phys fnax psx write -1 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/f_perp_it_w.last10
+	# incident energy
+echo "phys ei wtos write -1 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/ei_it_w.last10
+	# te
+echo "phys te write -1 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/te_it_w.last10
+	# ne
+echo "phys ne write -1 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/ne_it_w.last10
+	# na
+echo "phys eirc na write -1 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/na_it_w.last10
+	# po
+echo "phys po write -1 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/po_it_w.last10
+	# ti
+echo "phys ti write -1 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/ti_it_w.last10
+	# za
+echo "phys za write -1 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/za_it_w.last10
+	# ei_cal
+echo "phys po za m*  ti m+ write -1 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/ei_cal_it_w.last10
+	
+	# outer target
+echo "phys fnax psx write 96 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/f_perp_ot_w.last10
+
+echo "phys ei wtos write 96 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/ei_ot_w.last10
+
+echo "phys te write 96 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/te_ot_w.last10
+
+echo "phys ne write 96 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/ne_ot_w.last10
+
+echo "phys eirc na write 96 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/na_ot_w.last10
+
+echo "phys po write 96 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/po_ot_w.last10
+
+echo "phys ti write 96 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/ti_ot_w.last10
+
+echo "phys za write 96 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/za_ot_w.last10
+
+echo "phys po za m* ti m+ write 96 f.y" | b2plot;
+mv  b2pl.exe.dir/b2plot.write 2D_data/ei_cal_ot_w.last10
+
