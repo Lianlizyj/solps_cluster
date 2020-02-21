@@ -1,2 +1,2 @@
 # solps_cluster
-scriprs for solps in linux
+- 1. scriprs for solps in linux
