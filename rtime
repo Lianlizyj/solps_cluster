@@ -10,15 +10,19 @@ sum=`cat time_list | awk '{sum+=$2}END{print sum}'`
 #echo "${sum}" # 测试是否正确
 n_total=`tail -n 1 time_list | awk '{print $1}'`
 ave=`echo "scale=3;${sum} / ${n_total}"| bc`
-echo "============================================"
+echo "======================================================"
 echo "     已运行${n_total}步，平均每步运行时间${ave}秒。"
 rm time_list >& /dev/null
+sum_n=`grep ntim b2mn.dat | awk '{print $2}'`
+sum_n=${sum_n:1:-1} # get the total step
+time_pre=`echo "scale=2;${real_time} / ${n_total} * ${sum_n}"| bc`
 time_d=`echo "${real_time}  / 3600 / 24"|bc`
 time_h=`echo "(${real_time} - 3600 * 24 * ${time_d}) / 3600"|bc`
 time_m=`echo "(${real_time}  - 3600 * 24 * ${time_d} - ${time_h} * 3600) / 60"|bc`
-echo "     已运行${time_d}天${time_h}小时${time_m}分。"
-sum_n=`grep ntim b2mn.dat | awk '{print $2}'`
-sum_n=${sum_n:1:-1} # get the total step
+time_dp=`echo "${time_pre}  / 3600 / 24"|bc`
+time_hp=`echo "(${time_pre} - 3600 * 24 * ${time_dp}) / 3600"|bc`
+time_mp=`echo "(${time_pre}  - 3600 * 24 * ${time_dp} - ${time_hp} * 3600) / 60"|bc`
+echo "     已运行${time_d}天${time_h}小时${time_m}分,预计总运行时间${time_dp}天${time_hp}小时${time_mp}分。"
 n_left=`echo "${sum_n} - ${n_total}"|bc`
 cpu_time=`echo "${n_total} * ${ave} "|bc`
 time2=`echo "scale=2;${real_time} / ${n_total} * ${n_left}"|bc`
@@ -31,18 +35,8 @@ time1=$(date +%s -d "${tim}")
 time1=`echo "${time1} + ${time2}"|bc`
 io=`echo "scale=4;(1 - ${cpu_time} / ${real_time}) * 100"|bc`
 time1=$(date +%Y-%m-%d\ %H:%M:%S -d"1970-01-01 UTC $time1 seconds");
+
 echo "     剩余${n_left}步，需运行时间${time_d}天${time_h}小时${time_m}分 "
 echo "     预计$time1 运行完毕！"
 echo "     IO时间占比${io}%。 "
-echo "============================================"
-
-
-
-
-
-
-
-
-
-
-
+echo "======================================================"
