@@ -61,7 +61,9 @@ then
 		exit 0
 	fi 		
 	# ======================== paste parameter_list and mid_name ======= #
-	paste -d " " mid_para  mid_name > parameter_list  
+	paste -d " " mid_para  mid_name > parameter
+	awk '{gsub(/\./,"_",$2);print $0}' parameter | cat > parameter_list
+	rm parameter &> /dev/null 
 	rm mid_para &> /dev/null # don't display error
 	rm mid_name &> /dev/null
 elif [ ${flag} == 'n' ]	
