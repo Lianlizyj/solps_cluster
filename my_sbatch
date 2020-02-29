@@ -6,15 +6,19 @@
 
 # step 1 for
 path=`pwd`
-read -p  "Please enter the case_list file name:(e.g. case_name)" input
+read -p  "Please enter the case_list file name:(e.g. case_name) " input
+read -p  "Do you want to copy the b2fstate to b2fstati:( y | n)" flag
 while IFS=' ' read -r cn
 do
 	echo "qsub ${cn}!"
 	cd ${path}/${cn}
 	echo `pwd`
-	cp b2fstate b2fstate.cp;
-	cp b2fstati b2fstati.cp;
-	cp b2fstate b2fstati;
+	if [ ${flag} == 'y' ]
+	then
+		cp b2fstate b2fstate.cp;
+		cp b2fstati b2fstati.cp;
+		cp b2fstate b2fstati;
+	fi
 	sbatch SLURM.DUT-PSI-forSOLPS
 done < "$input"
 echo "qsub  case  success!"
