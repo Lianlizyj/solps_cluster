@@ -6,7 +6,7 @@
 echo -e "Please enter which parameter you want to scan!\n"
 echo -e  "Core density and input power scan is available!\n"
 echo -e  "Please enter 'den' or 'pow' correspondingly!\n"
-read -p "Please selete the parameter(e.g. den/pow): " para_selete
+read -p "Please selete the parameter(e.g. den[c/s]/pow[c/s]): " para_selete
 read -p "Please enter base case name(e.g. sd): " base_case
 case ${para_selete} in
 den | Den) echo
