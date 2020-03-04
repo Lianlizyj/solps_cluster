@@ -1,0 +1,33 @@
+#!bin/bash
+#echo '
+#set term postscript eps enhanced
+#set output "enhanced.eps"
+
+#set style data linespoints
+#set key top right
+#set xlabel "r-r_{sep}(m)"
+#set ylabel "ft3dr"
+#plot "ft3dr.last10"
+#' | gnuplot
+echo '
+ 
+set term post eps color solid enh
+set output "rad.eps"
+
+set multiplot title "radiation profiles" layout 4,2
+
+plot "rad_core_w.last10" w l 
+plot "rad_d_w.last10" w l
+
+plot "rad_sol_w.last10" w l
+plot "rad_c_w.last10" w l
+
+plot "rad_it_w.last10"  w l
+plot "rad_ot_w.last10"  w l
+
+plot "rad_tot_reg_w.last10"  w l
+plot "rad_tot_spe_w.last10"  w l
+
+unset multiplot
+' | gnuplot
+
