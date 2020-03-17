@@ -1,0 +1,441 @@
+#!/bin/bash
+
+# =================== 修改whereami 脚本 ===================== #
+# 第二次运行该脚本，保留原始的whereami
+echo -e  "==================== Modify whereami & default_compiler ======================\n "
+if [ -f whereami_orgin ]
+then
+	mv whereami_orgin whereami
+fi
+mv whereami whereami_orgin 
+# 将需要修改的内容重定向到whereami 文件
+`echo -e "#!/bin/csh\n echo DUT-PSI"| cat > whereami`
+# 给whereami文件加可执行权限
+chmod u+x whereami
+
+# =================== 修改default_complier ================== # 
+
+# sed 方法
+#sed -i '/CCFE/a\case "DUT-PSI"' default_compiler
+
+# awk 方法
+nt=`awk '$2 ~ "CCFE" {print NR} ' default_compiler`
+# 在指定的行后添加内容,如果不存在DUT-PSI,则添加
+flag=`grep DUT-PSI default_compiler`
+if [[ ! ${flag} ]]
+then
+	sed -i "${nt}a\case \"DUT-PSI\"" default_compiler
+else
+	echo "DUT-PSI has existed!"
+fi
+# =================== 复制编译好的库文件到 lib/ ============= #
+
+# specify the source path (user sepcify)
+echo -e  "==================== Specify the lib/DUT-PSI source path ======================\n "
+stop_source='/home/zhangyanjie/SOLPS_newest_bak/solps-iter'
+
+
+lib_source="${stop_source}/lib/DUT-PSI.ifort64"
+# get the destination path
+base_path=`pwd`
+full_path="${base_path}/lib"
+# copy the completed lib to new solps package
+if [ ! -d "${full_path}/DUT-PSI.ifort64" ] 
+then
+	cp -r ${lib_source} ${full_path}
+	echo "copy DUT-PSI.ifort64 success!"
+else	
+	echo "DUT-PSI.ifrot64 has existed."
+fi 
+
+
+# ==================== 启动solps ============================= #
+echo -e  "==================== Start solps success! ==== ======================\n "
+`echo -e "#!/bin/tcsh\n source setup.csh\n first_setup | cat > /dev/null"| cat > start_solps_tcsh`
+# 给whereami文件加可执行权限
+chmod u+x start_solps_tcsh
+./start_solps_tcsh
+
+echo -e  "\n==================== Start modify SETUP config files ===============\n "
+# ========================= modify the SETUP/ configuration files =============== #
+# 获得SETUP/ path
+setup_path="${base_path}/SETUP"
+
+# modify the setup.DUT-PSI.ifort64
+flag=`grep HL-2M "${setup_path}/setup.csh.DUT-PSI.ifort64"`
+
+if [[ ! ${flag} ]]
+then
+	sed -i '/# Set/a\if ( ! $?DEVICE) then\n   setenv DEVICE HL-2M\nendif\nsetenv GLI_HOME ${SOLPSTOP}/{HOST_NAME}.${COMPILER}\nsetenv NCARG_ROOT ${SOLPSTOP}/lib/${HOST_NAME}.${COMPILER}/NCARG' "${setup_path}/setup.csh.DUT-PSI.ifort64"
+	echo "Modify setup.csh.DUT-PSI.ifort64 success!"
+else 
+	echo "setup.csh.DUT-PSI.ifort64 has changed."
+fi
+
+echo "SETUP/setup.csh.DUT-PSI.ifort64 change information."
+sed -n '/DEVICE/,/NCARG/p' "${setup_path}/setup.csh.DUT-PSI.ifort64"
+
+echo -e "===================================================================\n"
+
+
+
+# modify the config.DUT-OSI.ifort64
+
+# 注释掉第一行
+sed -i 's/\$(error/#\$(error/' "${setup_path}/config.DUT-PSI.ifort64"
+
+flag=`awk '/?=/ {print NF}' "${setup_path}/config.DUT-PSI.ifort64" | tail -n1`
+if [ ${flag} -eq 2 ]
+then
+	sed -i 's/?=/& ${SOLPSLIB}/g' "${setup_path}/config.DUT-PSI.ifort64" 
+	sed -i '/NCARG_ROOT ?=/s/${SOLPSLIB}/${SOLPSLIB}\/NCARG/' "${setup_path}/config.DUT-PSI.ifort64"
+	sed -i '/MDSPLUS_DIR ?=/s/${SOLPSLIB}/${SOLPSLIB}\/MDSPLUS/' "${setup_path}/config.DUT-PSI.ifort64"
+	echo "Modify config.DUT-PSI.fort64 success!"
+else
+	echo "config.DUT-PSI.ifort64 has changed."
+fi
+
+# add "#" for LD_MPI,delete /lib except for NCARG & MDSPLUS
+flag=`awk '/^#L/ {print $1}' "${setup_path}/config.DUT-PSI.ifort64"  `
+if [[ ! ${flag} ]]
+then
+	sed -i '/lmpi/s/LD_MPI/#LD_MPI/' "${setup_path}/config.DUT-PSI.ifort64"
+	echo "Modify the #LD_MPI success!"
+else
+	echo "#LD_MPI has changed."
+fi
+
+sed -i '/LD_NETCDF/s/\/lib//' "${setup_path}/config.DUT-PSI.ifort64"
+sed -i '/LD_MSCL/s/\/lib//' "${setup_path}/config.DUT-PSI.ifort64"
+sed -i '/LD_GR/s/\/lib//' "${setup_path}/config.DUT-PSI.ifort64"
+sed -i '/LD_NAG/s/\/lib//' "${setup_path}/config.DUT-PSI.ifort64"
+grep error "${setup_path}/config.DUT-PSI.ifort64"
+grep NCARG_ROOT "${setup_path}/config.DUT-PSI.ifort64" | head -n1
+grep MDSPLUS_DIR "${setup_path}/config.DUT-PSI.ifort64" | head -n1
+grep 'L\$' "${setup_path}/config.DUT-PSI.ifort64"
+echo "Modify config.DUT-PSI.ifort64 successs!"
+
+# ========================= modify modules configuration files ================== #
+echo -e "========================= modify modules configuration files ==================="
+module_path="${base_path}/modules" # modules path
+
+# modify B2.5
+flag=`grep ffreestanding "${module_path}/B2.5/config/config.DUT-PSI.ifort64"`
+if [[ ! ${flag} ]]
+then
+	sed -i 's/traditional/& -ffreestanding/g' "${module_path}/B2.5/config/config.DUT-PSI.ifort64"
+	echo "Modify the B2.5 configuration file success!"
+else
+	echo "B2.5 ffreestranding has changed."
+fi
+
+# modify the mpiifort
+nr=`awk '/USE_MPI/ {print NR}' "${module_path}/B2.5/config/config.DUT-PSI.ifort64" | head -n 1`
+nt=`echo "${nr} + 1"|bc `
+#echo ${nt}
+sed -i "${nt}s/mpif90/mpiifort/" "${module_path}/B2.5/config/config.DUT-PSI.ifort64"
+
+nr=`awk '/IMPG/ {print NR}' "${module_path}/B2.5/config/config.DUT-PSI.ifort64" | head -n 1`
+nt1=`echo "${nr} + 1"|bc `
+#echo ${nt}
+sed -i  "${nt1}s/mpif90/mpiifort/" "${module_path}/B2.5/config/config.DUT-PSI.ifort64"
+
+# changed information
+grep ffree "${module_path}/B2.5/config/config.DUT-PSI.ifort64"
+
+echo "B2.5 mpiifort has changed."
+grep mpiifort "${module_path}/B2.5/config/config.DUT-PSI.ifort64"
+
+echo -e "===================================================================\n"
+
+
+# modify Eirene
+flag=`grep ffreestanding "${module_path}/Eirene/config/config.DUT-PSI.ifort64"`
+if [[ ! ${flag} ]]
+then
+	sed -i 's/traditional/& -ffreestanding/g' "${module_path}/Eirene/config/config.DUT-PSI.ifort64"
+	echo "Modify the Eirene configuration file success!"
+else
+	echo "Eirene ffreestranding has changed."
+fi
+
+# modify the mpiifort
+nr=`awk '/USE_MPI/ {print NR}' "${module_path}/Eirene/config/config.DUT-PSI.ifort64" | head -n 1`
+nt=`echo "${nr} + 1"|bc `
+#echo ${nt}
+sed -i "${nt}s/mpif90/mpiifort/" "${module_path}/Eirene/config/config.DUT-PSI.ifort64"
+
+nr=`awk '/IMPG/ {print NR}' "${module_path}/Eirene/config/config.DUT-PSI.ifort64" | head -n 1`
+nt1=`echo "${nr} + 1"|bc `
+#echo ${nt}
+sed -i  "${nt1}s/mpif90/mpiifort/" "${module_path}/Eirene/config/config.DUT-PSI.ifort64"
+
+# changed information
+grep ffree "${module_path}/Eirene/config/config.DUT-PSI.ifort64"
+
+echo "Eirene mpiifort has changed."
+grep mpiifort "${module_path}/Eirene/config/config.DUT-PSI.ifort64"
+
+echo -e "===================================================================\n"
+
+
+# modify Uinp
+flag=`grep ffreestanding "${module_path}/Uinp/config/config.DUT-PSI.ifort64"`
+if [[ ! ${flag} ]]
+then
+	sed -i 's/traditional/& -ffreestanding/g' "${module_path}/Uinp/config/config.DUT-PSI.ifort64"
+	echo "Modify the Uinp configuration file success!"
+else
+	echo "Uinp ffreestranding has changed."
+fi
+
+# modify the mpiifort
+nr=`awk '/USE_MPI/ {print NR}' "${module_path}/Uinp/config/config.DUT-PSI.ifort64" | head -n 1`
+nt=`echo "${nr} + 1"|bc `
+#echo ${nt}
+sed -i "${nt}s/mpif90/mpiifort/" "${module_path}/Uinp/config/config.DUT-PSI.ifort64"
+
+
+# changed information
+grep ffree "${module_path}/Uinp/config/config.DUT-PSI.ifort64"
+
+echo "Uinp mpiifort has changed."
+grep mpiifort "${module_path}/Uinp/config/config.DUT-PSI.ifort64"
+
+
+echo -e "===================================================================\n"
+
+
+# modify fxdr
+flag=`grep ffreestanding "${module_path}/fxdr/config/config.default.ifort64"`
+if [[ ! ${flag} ]]
+then
+	sed -i 's/traditional/& -ffreestanding/g' "${module_path}/fxdr/config/config.default.ifort64"
+	echo "Modify the fxdr configuration file success!"
+else
+	echo "Fxdr ffreestranding has changed."
+fi
+
+# delete the -vec_report0
+sed -i 's/-vec_report0//' "${module_path}/fxdr/config/config.default.ifort64"
+
+# changed information
+grep ffree "${module_path}/fxdr/config/config.default.ifort64"
+
+echo "Fxdr FFLAGS has changed."
+grep FFLAGS "${module_path}/fxdr/config/config.default.ifort64" | awk 'NR==2 {print}'
+
+
+
+echo -e "===================================================================\n"
+
+# modify Carre
+flag=`grep ffreestanding "${module_path}/Carre/config/config.DUT-PSI.ifort64"`
+if [[ ! ${flag} ]]
+then
+	sed -i 's/traditional/& -ffreestanding/g' "${module_path}/Carre/config/config.DUT-PSI.ifort64"
+	echo "Modify the Carre configuration file success!"
+else
+	echo "Carre ffreestranding has changed."
+fi
+
+# delete the -vec_report0
+sed -i 's/-vec_report0//' "${module_path}/Carre/config/config.DUT-PSI.ifort64"
+
+# changed information
+grep ffree "${module_path}/Carre/config/config.DUT-PSI.ifort64"
+
+echo "Carre FFLAGS has changed."
+grep FFLAGS "${module_path}/Carre/config/config.DUT-PSI.ifort64" | awk 'NR==2 {print}'
+
+
+echo -e "===================================================================\n"
+
+# modify Triang
+flag=`grep ffreestanding "${module_path}/Triang/config/config.DUT-PSI.ifort64"`
+if [[ ! ${flag} ]]
+then
+	sed -i 's/traditional/& -ffreestanding/g' "${module_path}/Triang/config/config.DUT-PSI.ifort64"
+	echo "Modify the Triang configuration file success!"
+else
+	echo "Triang ffreestranding has changed."
+fi
+
+# delete the -vec_report0
+sed -i 's/-vec_report0//' "${module_path}/Triang/config/config.DUT-PSI.ifort64"
+
+# changed information
+grep ffree "${module_path}/Triang/config/config.DUT-PSI.ifort64"
+
+echo "Triang vec_report has deleted."
+grep FCOPTS "${module_path}/Triang/config/config.DUT-PSI.ifort64" | tail -n1
+
+
+echo -e "===================================================================\n"
+
+# modify Divgeo equtrn
+flag=`grep ffreestanding "${module_path}/DivGeo/equtrn/config/config.DUT-PSI.ifort64"`
+if [[ ! ${flag} ]]
+then
+	sed -i 's/traditional/& -ffreestanding/g' "${module_path}/DivGeo/equtrn/config/config.DUT-PSI.ifort64"
+	echo "Modify the DG equtrn configuration file success!"
+else
+	echo "DG equtrn ffreestranding has changed."
+fi
+
+
+# changed information
+grep ffree "${module_path}/DivGeo/equtrn/config/config.DUT-PSI.ifort64"
+
+echo -e "===================================================================\n"
+
+# modify Divgeo convert
+flag=`grep ffreestanding "${module_path}/DivGeo/convert/config/config.DUT-PSI.ifort64"`
+if [[ ! ${flag} ]]
+then
+	sed -i 's/traditional/& -ffreestanding/g' "${module_path}/DivGeo/convert/config/config.DUT-PSI.ifort64"
+	echo "Modify the DG convert configuration file success!"
+else
+	echo "DG convert ffreestranding has changed."
+fi
+
+
+# changed information
+grep ffree "${module_path}/DivGeo/convert/config/config.DUT-PSI.ifort64"
+
+echo -e "========================================= start to compiler ======================================"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ==================== 复制setup.csh到SETUP/ ================ #
+#setup_path="${base_path}/SETUP"
+#setup_source="${stop_source}/SETUP/setup.csh.DUT-PSI.ifort64"
+#config_source="${stop_source}/SETUP/config.DUT-PSI.ifort64"
+
+# copy setup.csh.DUT-PSI.ifort64
+#if [ ! -f "${setup_path}/SETUP/setup.csh.DUT-PSI.ifort64" ]
+#then
+#	cp ${setup_source} ${setup_path}
+#	echo "copy setup.csh success!"
+#else
+#	echo "setup.csh.DUT-PSI.ifort64 has existed."
+#fi
+
+# copy config.DUT-PSI.ifort64
+#if [ ! -f "${setup_path}/SETUP/config.DUT-PSI.ifort64" ]
+#then
+#	cp ${config_source} ${setup_path}
+#	echo "copy config success!"
+#else
+#	echo "config.DUT-PSI.ifort64 has existed."
+#fi
+
+# =================== modify the config.DUT-PSI.ifort64 =========== #
+# check the NCARG,MDSPLUS ROOT
+
+#echo -e "Begin check the config.DUT-PSI.ifort64!\n"
+
+#ncarg_root=`awk 'BEGIN{FS = "/"} /NCARG_ROOT \?=/ {print $2}' "${setup_path}/config.DUT-PSI.ifort64"`
+#if [ ${ncarg_root} == "NCARG" ]
+#then
+#	echo "NCARG_ROOT is ok!"
+#else
+#	echo "please check the NCARG_ROOT."
+#fi
+
+#mdsplus_root=`awk 'BEGIN{FS = "/"} /MDSPLUS_DIR \?=/ {print $2}' "${setup_path}/config.DUT-PSI.ifort64"`
+#if [ ${mdsplus_root} == "MDSPLUS" ]
+#then
+#	echo "MDSPLUS_DIR is ok!"
+#else
+#	echo "please check the MDSPLUS_DIR."
+#fi
+
+#grep -m 2 "LD_NETCDF" "${setup_path}/config.DUT-PSI.ifort64" | tail -n 1
+#grep -m 2 "LD_MSCL" "${setup_path}/config.DUT-PSI.ifort64" | tail -n 1
+#grep -m 2 "LD_GR" "${setup_path}/config.DUT-PSI.ifort64" | tail -n 1
+#grep -m 2 "LD_GKS" "${setup_path}/config.DUT-PSI.ifort64" | head -n 1
+#grep -m 2 "LD_NCARG" "${setup_path}/config.DUT-PSI.ifort64" | head -n 1
+#grep -m 2 "LD_NAG" "${setup_path}/config.DUT-PSI.ifort64" | tail -n 1
+##grep -m 2 "LD_MDSPLUS" "${setup_path}/config.DUT-PSI.ifort64" | head -n 1
+#grep -m 2 "LD_SONNET" "${setup_path}/config.DUT-PSI.ifort64" | head -n 1
+#grep -m 2 "#LD_MPI" "${setup_path}/config.DUT-PSI.ifort64" | tail -n 1
+
+# ==================== modify the modules config files ================== #
+#modules_path="${base_path}/modules"
+
+# copy the B2.5 config/ to new solps-iter
+
+
+
+
+# modify the B2.5 config
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#`echo tcsh` # 启动tcsh
+#`echo source setup.csh`
+#echo "test tcsh & source"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
