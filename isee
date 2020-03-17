@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# function : quickly check the input file
+
+echo -e " input.dat \n"
+sed -n '/6a/,/7\./p' input.dat
+
+echo -e "b2.numerics.parameters \n"
+sed -n '2,5p' b2.numerics.parameters
+
+echo -e "b2.transport.parameters \n"
+grep dna b2.transport.parameters
+grep hc b2.transport.parameters
+
+echo -e "b2.neutrals.parameters \n"
+grep fluxparm b2.neutrals.parameters
+
+echo -e "b2.boundary.parameters \n"
+sed -n '10,11p' b2.boundary.parameters
+sed -n '17p' b2.boundary.parameters
+sed -n '19,23p' b2.boundary.parameters
+
+echo -e "b2mn.dat "
+sed -n '9,13p' b2mn.dat
+
+echo -e "SLURM.DUT-PSI-forSOLPS "
+sed -n '3,9p' SLURM.DUT-PSI-forSOLPS
