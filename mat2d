@@ -1,0 +1,128 @@
+#!/bin/bash
+mkdir 2D_data
+
+# function： get the mprt file
+
+# diffusivities
+
+	# diffusion
+echo "phys d 'd_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/d_2D.last10 2D_data
+        # electron heat diffusivity
+echo "phys kye 'kye_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/kye_2D.last10 2D_data
+        # ion heat diffusivity
+echo "phys kyi 'kyi_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/kyi_2D.last10 2D_data
+        # total ion heat diffusivity
+echo "phys kyi0 'kyi0_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/kyi0_2D.last10 2D_data
+
+	# zeff
+echo "phys eirc zeff 'zeff_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/zeff_2D.last10 2D_data
+
+    # fnax
+echo "phys fnax 'fnax_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fnax_2D.last10 2D_data 
+    # rad_tot
+echo "phys b2ra  b2br m+ pvol  abs 0 0 sumz  neutrad pvol  abs 0 0 sumz  m+ 'rad_d_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/rad_d_2D.last10 2D_data
+    # rad_d
+echo "phys b2ra  b2br m+ pvol  abs 0 1 sumz  neutrad pvol  abs 0  zsel  m+ 'rad_d_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/rad_d_2D.last10 2D_data
+    # rad_c
+echo "phys b2ra  b2br m+ pvol  abs 2 8 sumz  neutrad pvol  abs 1  zsel  m+ 'rad_c_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/rad_c_2D.last10 2D_data
+    # rad_ne
+echo "phys b2ra  b2br m+ pvol  abs 9 19 sumz  neutrad pvol  abs 2  zsel  m+ 'rad_c_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/rad_c_2D.last10 2D_data
+	
+	# q_par
+echo "phys fhtx 0 0 sumz psxperp pit m/  'q_par_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/q_par_2D.last10 2D_data
+	# f_par
+echo "phys fnax 0 0 sumz psxperp pit m/  'f_par_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/f_par_2D.last10 2D_data
+	# jsat
+echo "phys fnax 0 0 sumz psxperp pit m/ 6.24e22 rm/  'jsat_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/jsat_2D.last10 2D_data
+	# conn
+echo "phys conn 59 'conn_2D.last10' mprt " | b2plot; 
+mv b2pl.exe.dir/conn_2D.last10 2D_data
+	# temperature
+echo "te 'te_2D.last10' mprt" | b2plot; 
+mv b2pl.exe.dir/te_2D.last10 2D_data
+echo "ti 'ti_2D.last10' mprt" | b2plot;
+ mv b2pl.exe.dir/ti_2D.last10 2D_data
+echo "tab2 'tab2_2D.last10' mprt" | b2plot;
+ mv b2pl.exe.dir/tab2_2D.last10 2D_data
+echo "tmb2 'tmb2_2D.last10' mprt" | b2plot;
+ mv b2pl.exe.dir/tmb2_2D.last10 2D_data
+	# density
+echo "phys eirc dmb2 'nm_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/nm_2D.last10 2D_data
+echo "phys eirc dab2 'nae_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/nae_2D.last10 2D_data
+echo "phys na 'nab_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/nab_2D.last10 2D_data
+	# pressure
+echo "pr 'pr_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/pr_2D.last10 2D_data
+echo "p* 'pt_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/pt_2D.last10 2D_data
+	# neutral pressure
+ echo "phys eirc dab2 abs 0 zsel eirc tab2 abs 0 zsel m*  eirc dab2 abs 2 zsel eirc tab2 abs 2 zsel m* m+ eirc dab2 abs 1 zsel eirc tab2 abs 1 zsel m* m+   1.6e19 rm/ 'pneu_c_2D.last10' mprt" | b2plot; 
+ mv b2pl.exe.dir/pneu_c_2D.last10 2D_data
+	# pressure gradient
+echo "phys pr ddx  'gp_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/gp_2D.last10 2D_data	
+echo "phys p* ddx  'gpt_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/gpt_2D.last10 2D_data	
+
+
+
+
+
+
+	# electric potential
+echo "po ddx 'Ep_2D.last10' mprt" | b2plot;
+ mv b2pl.exe.dir/Ep_2D.last10 2D_data
+echo "po ddy 'Er_2D.last10' mprt" | b2plot;
+ mv b2pl.exe.dir/Er_2D.last10 2D_data
+echo "po  'po_2D.last10' mprt" | b2plot;
+ mv b2pl.exe.dir/po_2D.last10 2D_data
+	# velocity
+echo "up 1 zsel 'vp_2D.last10' mprt" | b2plot;
+ mv b2pl.exe.dir/vp_2D.last10 2D_data
+echo "vv 1 zsel 'vr_2D.last10' mprt" | b2plot;
+ mv b2pl.exe.dir/vr_2D.last10 2D_data
+echo "ww 1 zsel 'vz_2D.last10' mprt" | b2plot;
+ mv b2pl.exe.dir/vz_2D.last10 2D_data
+echo "ua 1 zsel 'ua_2D.last10' mprt" | b2plot;
+ mv b2pl.exe.dir/ua_2D.last10 2D_data
+ echo "phys mach   'mach_2D.last10' mprt " | b2plot ;
+ mv b2pl.exe.dir/mach_2D.last10 2D_data
+	# force
+echo "phys smp   'smp_2D.last10' mprt " | b2plot ;
+ mv b2pl.exe.dir/smp_2D.last10 2D_data
+echo "phys smth  'smth_2D.last10' mprt " | b2plot ;
+ mv b2pl.exe.dir/smth_2D.last10 2D_data; less 2D_data/.smth_2D.last10
+echo "phys smfr  'smfr_2D.last10' mprt " | b2plot ;
+ mv b2pl.exe.dir/smfr_2D.last10 2D_data
+	# brna
+echo "phys eirc brna   'brna_2D.last10' mprt " | b2plot ;
+ mv b2pl.exe.dir/brna_2D.last10 2D_data
+	# s、q
+echo "phys s  's_2D.last10' mprt " | b2plot ;
+ mv b2pl.exe.dir/s_2D.last10 2D_data
+echo "phys q  'q_2D.last10' mprt " | b2plot ;
+ mv b2pl.exe.dir/q_2D.last10 2D_data
+	# pdena
+echo "phys eirc pdena  'pdena_eir.last10' eprt " | b2plot ;
+ mv b2pl.exe.dir/pdena_eir.last10 2D_data
+
+
+
+
+
+
+
+
+
+
