@@ -24,9 +24,19 @@ mv b2pl.exe.dir/zeff_2D.last10 2D_data
 
     # fnax
 echo "phys fnax 'fnax_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fnax_2D.last10 2D_data 
+
+    # rad_b2ra
+echo "phys b2ra abs 'rad_b2ra_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/rad_b2ra_2D.last10 2D_data
+    # rad_b2br
+echo "phys b2br abs 'rad_b2br_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/rad_b2br_2D.last10 2D_data
+    # rad_neutrad
+echo "phys neutrad abs 'rad_neutrad_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/rad_neutrad_2D.last10 2D_data
     # rad_tot
-echo "phys b2ra  b2br m+ pvol  abs 0 0 sumz  neutrad pvol  abs 0 0 sumz  m+ 'rad_d_2D.last10' mprt " | b2plot ;
-mv b2pl.exe.dir/rad_d_2D.last10 2D_data
+echo "phys b2ra  b2br m+ pvol  abs 0 0 sumz  neutrad pvol  abs 0 0 sumz  m+ 'rad_tot_2D.last10' mprt " | b2plot ;
+mv b2pl.exe.dir/rad_tot_2D.last10 2D_data
     # rad_d
 echo "phys b2ra  b2br m+ pvol  abs 0 1 sumz  neutrad pvol  abs 0  zsel  m+ 'rad_d_2D.last10' mprt " | b2plot ;
 mv b2pl.exe.dir/rad_d_2D.last10 2D_data
