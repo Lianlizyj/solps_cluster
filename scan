@@ -23,7 +23,30 @@ do
 		cd ${file}
 	#	most_data
 	#	zc_script
-		2d_profiles
+
+    # core radiation
+echo "comp brna 0.0 rmma pot m* 0 0 sumz ev rm* -1.0 rm* brhe m- b2ra 0 0 sumz m+ b2br 0 0 sumz m+ 1 nreg m* sumx sumy jxa writ f.y " | b2plot >& /dev/null ; less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","core_t",$2)}' > "2D_data/radiation_w.last10"
+    # sol radiation
+echo "comp brna 0.0 rmma pot m* 0 0 sumz ev rm* -1.0 rm* brhe m- b2ra 0 0 sumz m+ b2br 0 0 sumz m+ 2 nreg m* sumx sumy jxa writ f.y " | b2plot >& /dev/null ; less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","sol_t",$2)}' >> "2D_data/radiation_w.last10"
+    # it radiation
+echo "comp brna 0.0 rmma pot m* 0 0 sumz ev rm* -1.0 rm* brhe m- b2ra 0 0 sumz m+ b2br 0 0 sumz m+ 3 nreg m* sumx sumy jxa writ f.y " | b2plot >& /dev/null ; less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","it_t",$2)}' >> "2D_data/radiation_w.last10"
+    # ot radiation
+echo "comp brna 0.0 rmma pot m* 0 0 sumz ev rm* -1.0 rm* brhe m- b2ra 0 0 sumz m+ b2br 0 0 sumz m+ 4 nreg m* sumx sumy jxa writ f.y " | b2plot >& /dev/null ; less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","ot_t",$2)}' >> "2D_data/radiation_w.last10"
+    # total radiation
+echo "comp brna 0.0 rmma pot m* 0 0 sumz ev rm* -1.0 rm* brhe m- b2ra 0 0 sumz m+ b2br 0 0 sumz m+ sumx sumy jxa writ f.y " | b2plot >& /dev/null ; less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","total_t",$2)}' >> "2D_data/radiation_w.last10"
+
+# ================================= radiation of carbon ========================= #
+    # core radiation
+echo "comp b2ra 2 8 sumz b2br 2 8 sumz m+ 1 nreg m* sumx sumy jxa writ f.y" | b2plot >& /dev/null;less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","core_c",$2)}' >> "2D_data/radiation_w.last10"
+    # sol radiation
+echo "comp b2ra 2 8 sumz b2br 2 8 sumz m+ 2 nreg m* sumx sumy jxa writ f.y" | b2plot >& /dev/null;less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","sol_c",$2)}' >> "2D_data/radiation_w.last10"
+    # it radiation
+echo "comp b2ra 2 8 sumz b2br 2 8 sumz m+ 3 nreg m* sumx sumy jxa writ f.y" | b2plot >& /dev/null;less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","it_c",$2)}' >> "2D_data/radiation_w.last10"
+    # ot radiation
+echo "comp b2ra 2 8 sumz b2br 2 8 sumz m+ 4 nreg m* sumx sumy jxa writ f.y" | b2plot >& /dev/null;less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","ot_c",$2)}' >> "2D_data/radiation_w.last10"
+    # total radiation
+echo "comp b2ra 2 8 sumz b2br 2 8 sumz m+ sumx sumy jxa writ f.y" | b2plot >& /dev/null;less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","total_c",$2)}' >> "2D_data/radiation_w.last10"
+
 #echo write phys b2ra b2br m+ abs 0 0 sumz neutrad abs 0 0 sumz m+ sumx sumy 59 f.y | b2plot ;mv  b2pl.exe.dir/b2plot.write 2D_data/rad_tot_spe_w.last10
 
 #echo write phys b2ra b2br m+ abs 0 1 sumz neutrad abs 0 zsel m+ sumx sumy 59 f.y | b2plot ;mv  b2pl.exe.dir/b2plot.write 2D_data/rad_d_w.last10
