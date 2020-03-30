@@ -18,6 +18,15 @@ echo write phys fnax 0 0 sumz psxperp pit m/ 96 f.y | b2plot;mv b2pl.exe.dir/b2p
 echo "write conn 59 f.y" | b2plot; mv b2pl.exe.dir/b2plot.write 2D_data/conno_w.last10
 echo "write conn 39 f.y" | b2plot; mv b2pl.exe.dir/b2plot.write 2D_data/conni_w.last10
 
+# q/f_perp
+echo write phys fhtx 0 8 sumz psx abs eabs -1 f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/q_per_it_w.last10
+
+ echo write phys fnax 0 8 sumz psx abs eabs -1 f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/f_per_it_w.last10
+
+echo write phys fhtx 0 8 sumz psx abs eabs 96 f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/q_per_ot_w.last10
+
+ echo write phys fnax 0 8 sumz psx abs eabs 96 f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/f_per_ot_w.last10
+
 # q_par
 	# divertor entrance
 echo write phys fhtx 0 0 sumz psxperp pit m/ 72 abs f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/q_par_od_w.last10
@@ -64,6 +73,7 @@ mv b2pl.exe.dir/b2plot.write 2D_data/nD_ot_w.last10
 echo "write phys eirc dab2 0 zsel -1 f.y " | b2plot;
 mv b2pl.exe.dir/b2plot.write 2D_data/nD_it_w.last10
 
+echo "calculating rediation, wait for minutes"
 # ==================== get the radiation information ========================== #
     # core radiation
 echo "comp brna 0.0 rmma pot m* 0 0 sumz ev rm* -1.0 rm* brhe m- b2ra 0 0 sumz m+ b2br 0 0 sumz m+ 1 nreg m* sumx sumy jxa writ f.y " | b2plot >& /dev/null ; less b2pl.exe.dir/b2plot.write | tail -n1 | awk '{printf("%8s: %f\n","core_t",$2)}' > "2D_data/radiation_w.last10"
