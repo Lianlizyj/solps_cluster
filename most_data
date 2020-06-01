@@ -30,7 +30,7 @@ echo write phys fhtx 0 8 sumz psx abs eabs 96 f.y | b2plot;mv b2pl.exe.dir/b2plo
 # q_par
 	# divertor entrance
 echo write phys fhtx 0 0 sumz psxperp pit m/ 72 abs f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/q_par_od_w.last10
-echo write phys fhtx 0 0 sumz psxperp pit m/ 59 abs f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/q_par_id_w.last10
+echo write phys fhtx 0 0 sumz psxperp pit m/ 24 abs f.y | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/q_par_id_w.last10
 	# divertor target
 echo write phys fhtx 0 0 sumz psxperp pit m/ abs eabs 96 f.y  | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/q_par_ot_w.last10
 echo write phys fhtx 0 0 sumz psxperp pit m/ abs eabs -1 f.y  | b2plot;mv b2pl.exe.dir/b2plot.write 2D_data/q_par_it_w.last10
