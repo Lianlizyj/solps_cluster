@@ -4,10 +4,10 @@
 
 # ====================== read in the parameter range =============== #
 echo -e "Please enter which parameter you want to scan!\n"
-echo -e  "Core density and input power scan is available!\n"
-echo -e  "Please enter 'den' or 'pow' correspondingly!\n"
-read -p "Please selete the parameter(e.g. den[c/s]/pow[c/s]): " para_selete
-read -p "Please enter base case name(e.g. sd): " base_case
+echo -e  "Core density, input power scan and gas puff are available!\n"
+echo -e  "Please enter 'den' or 'pow' or 'gas' correspondingly!\n"
+read -p "Please selete the parameter(e.g. den[c/s]/pow[c/s]/gas[c/s]): " para_selete
+read -p "Please enter base case name(e.g. sd/sf): " base_case
 case ${para_selete} in
 den | Den) echo
 	echo "OK, you selete core density scan."
@@ -18,8 +18,14 @@ pow | Pow) echo
 	echo "OK, you selete input power scan."
 	read -p "Please enter the initial power(e.g. 3.0(default:*1e6)): " init_pow
         pe=`echo "scale=1;${init_pow} / 2"|bc` # equal to init_pow / 2
-        pe="${pe}e6"
+#        pe="${pe}e6"
+	pe="${pe}00E+06"
         echo "enepar is: ${pe}";;
+gas | Gas) echo
+	echo "OK, you selete gas puffing rate scan."
+	read -p "Please enter the initial gas puff rate(e.g. 1.0(default:*1e19)): " init_gas
+	init_gas="${init_gas}00E+19"
+	echo "${init_gas}"	;;
 esac
 # ===================== selete the method which creating the parameter list ============== #
 read -p "Do you want to create parameter list by sequence? [y | n]: " flag
@@ -56,6 +62,12 @@ then
 		do
 			printf "%1.3E\n" ${i} | cat >> mid_para
 		done
+	elif [ ${para_selete} == 'gas' ]
+	then
+		for i in `seq -f "%1.2f0E+19" ${beg} ${step} ${last}`
+		do
+			printf "%1.3E\n" ${i} | cat >> mid_para
+		done
 	else
 		echo "Developing, you will quit. See you later!"
 		exit 0
@@ -87,7 +99,6 @@ then
 else 
 	echo "Game over. Script stop! See you next time. "	
 fi
-
 # ===================== create the case cluster name =============== #
 read -p "Please enter the basename (e.g. 3MW-C):" base_name
 case ${para_selete} in
@@ -95,9 +106,10 @@ den | Den) echo
         base_name="e19-${base_name}-den";;
 pow | Pow) echo
         base_name="MW-${base_name}-pow";;
+gas | Gas) echo
+        base_name="e19-${base_name}-gas";;
 esac
 echo "case basename is ${base_name}"
-
 # ==================== read in the SLUM revelenet parameters ======= #
 read -p "Please enter the jobname (e.g. test):" job_name
 
@@ -107,7 +119,6 @@ mkdir baserun # case running need this directory
 rm case_name &> /dev/null # delete the old case_name file
 echo ${para_selete}
 # ============================ switch parameter scan =============== #
-
 if [ ${para_selete} == 'den' ]
 then
 	echo "You selete core density scan."
@@ -154,6 +165,27 @@ then
                 sed -i "/J/s/${job_name}/${slum}/g" ${pp1}
                 grep "J" ${pp1}
         done < parameter_list
+elif [ ${para_selete} == 'gas' ]
+then
+	echo "You selete gas puffing rate scan."
+	while read -r line name
+	do
+		#echo ${line}
+		#echo ${name}
+                complete_name=${name}${base_name}
+		echo ${complete_name} | cat >> case_name
+		cp -r ${base_case} ${complete_name}
+        	pp="${path}/${complete_name}/b2.neutrals.parameters" # case path
+		pp1="${path}/${complete_name}/SLURM.DUT-PSI-forSOLPS" # case path
+		echo "${pp}"
+        	# =============== modify the core  density ================= #
+        	sed -i "/user/s/${init_gas}/${line}/g" ${pp}
+		grep "user" ${pp}
+		# ================= modify the job name ==================== #
+		slum="${line:0:3}-${para_selete}"
+		sed -i "/J/s/${job_name}/${slum}/g" ${pp1}
+        	grep "J" ${pp1}
+	done < parameter_list
 else
 	echo "Other parameter scan is developping."
 fi
