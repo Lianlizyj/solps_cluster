@@ -13,8 +13,9 @@ ave=`echo "scale=3;${sum} / ${n_total}"| bc`
 echo "======================================================"
 echo "     已运行${n_total}步，平均每步运行时间${ave}秒。"
 rm time_list >& /dev/null
-sum_n=`grep ntim b2mn.dat | awk '{print $2}'`
+sum_n=`grep b2mndr_ntim b2mn.dat| head -n 1 | awk '{print $2}'`
 sum_n=${sum_n:1:-1} # get the total step
+#echo "${sum_n}"
 time_pre=`echo "scale=2;${real_time} / ${n_total} * ${sum_n}"| bc`
 time_d=`echo "${real_time}  / 3600 / 24"|bc`
 time_h=`echo "(${real_time} - 3600 * 24 * ${time_d}) / 3600"|bc`
