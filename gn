@@ -14,19 +14,33 @@ echo '
 set term post eps color solid enh
 set output "base.eps"
 
-set multiplot title "main information" layout 4,2
+set multiplot title "Target profiles" layout 4,2
+set mxtics 5
+# set mytics 2
 
-plot "te3dl.last10" w l 
-plot "te3dr.last10" w l
+plot "te3dl.last10" using 1:(abs($2)) w l title "te3dl"
+#ntics=3
+# stats "te3dl.last10" u 1:2 nooutput
+# set xrange [STATS_min_y:STATS_max_x]
+# set ytics STATS_max_y/ntics
 
-plot "ne3dl.last10" w l
-plot "ne3dr.last10" w l
+plot "te3dr.last10" using 1:(abs($2)) w l title "te3dr"
+# ntics=3
+# stats "te3dr.last10" u 1:2 nooutput
+# set xrange [STATS_min_y:STATS_max_x]
+# set ytics STATS_max_y/ntics
 
-plot "ft3dl.last10"  w l
-plot "ft3dr.last10"  w l
+set format y "%1.1e"
+plot "ne3dl.last10" using 1:(abs($2)) w l title "ne3dl"
+plot "ne3dr.last10" using 1:(abs($2)) w l title "ne3dr"
 
-plot "fn3dl.last10"  w l
-plot "fn3dr.last10"  w l
+plot "ft3dl.last10" using 1:(abs($2)) w l title "ft3dl"
+plot "ft3dr.last10" using 1:(abs($2)) w l title "ft3dr"
+
+
+plot "fn3dl.last10" using 1:(abs($2)) w l title "fn3dl"
+plot "fn3dr.last10" using 1:(abs($2)) w l title "fn3dr"
+
 
 unset multiplot
 ' | gnuplot
