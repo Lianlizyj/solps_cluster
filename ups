@@ -15,12 +15,13 @@ set term post eps color solid enh
 set output "ups.eps"
 
 set multiplot title "upstream profiles" layout 2,2
+set mxtics 5
+set mytics 5
+plot "te3di.last10" using 1:(abs($2))  w l ti "ti3di" 
+plot "te3da.last10" using 1:(abs($2))  w l ti "ti3da"
 
-plot "te3di.last10"   w l, "ti3di.last10" w l
-plot "te3da.last10"   w l, "ti3da.last10" w l
-
-plot "ne3di.last10" w l
-plot "ne3da.last10" w l
+plot "ne3di.last10" using 1:(abs($2))  w l ti "ne3di"
+plot "ne3da.last10" using 1:(abs($2))  w l ti "ne3da"
 
 #plot "ft3di.last10"  w l
 #plot "ft3da.last10"  w l
