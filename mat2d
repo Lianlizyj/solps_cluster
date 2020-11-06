@@ -9,12 +9,35 @@ mkdir 2D_data
 echo "phys eirc zeff 'zeff_2D.last10' mprt " | b2plot ;
 mv b2pl.exe.dir/zeff_2D.last10 2D_data
 
-
+# ====================================== velocity ===================================== #
+	# poloidal velocity
+echo "phys eirc up 'up_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/up_2D.last10 2D_data 
+	# radial velocity
+echo "phys eirc vv 'vv_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/vv_2D.last10 2D_data 
+	# poloidal drift velocity
+echo "phys eirc ud 'ud_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/ud_2D.last10 2D_data 
+	# radial drift velocity
+echo "phys eirc vd 'vd_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/vd_2D.last10 2D_data 
+	# thermal velocity
+echo "phys eirc vth 'vth_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/vth_2D.last10 2D_data 
+	
 # ======================================== flux ======================================== #
 	# fnax
 echo "phys eirc fnax 'fnax_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fnax_2D.last10 2D_data 
-	# fhtx
+	# fnay
+echo "phys eirc fnay 'fnay_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fnay_2D.last10 2D_data 
+	# fnaxnodr
+echo "phys eirc fnaxnodr 'fnaxnodr_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fnaxnodr_2D.last10 2D_data 
+	# fnaynodr
+echo "phys eirc fnaynodr 'fnaynodr_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fnaynodr_2D.last10 2D_data 
+	
+# fhtx & fhetx & fhitx
 echo "phys eirc fhtx 'fhtx_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fhtx_2D.last10 2D_data 
+echo "phys eirc fhetx 'fhetx_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fhetx_2D.last10 2D_data 
+echo "phys eirc fhitx 'fhitx_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fhitx_2D.last10 2D_data 
+echo "phys eirc fhjx 'fhjx_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fhjx_2D.last10 2D_data 
+echo "phys eirc fhmx 'fhmx_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fhmx_2D.last10 2D_data 
+echo "phys eirc fhpx 'fhpx_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/fhpx_2D.last10 2D_data 
 
 # ===================================== radiation ====================================== #	
 	# b2ra
@@ -26,6 +49,23 @@ mv b2pl.exe.dir/b2br_2D.last10 2D_data
 	# brna
 echo "phys eirc brna 'brna_2D.last10' mprt " | b2plot ;
  mv b2pl.exe.dir/brna_2D.last10 2D_data
+	# power loss due to atom radiation
+echo "phys eirc neutrad 'neutrad_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/neutrad_2D.last10 2D_data 
+	# power loss due to molecular radiation
+echo "phys eirc molrad 'molrad_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/molrad_2D.last10 2D_data 
+	# power loss due to molecular ion radiation
+echo "phys eirc ionrad 'ionrad_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/ionrad_2D.last10 2D_data 
+	
+# ================================== H_{\alpha} emissivity ============================ #
+echo "phys eirc mhal 'mhal_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/mhal_2D.last10 2D_data 
+echo "phys eirc ahal 'ahal_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/ahal_2D.last10 2D_data 
+	
+# ================================== difussion ======================================== #
+echo "phys eirc kye 'kye_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/kye_2D.last10 2D_data 
+echo "phys eirc kyi0 'kyi0_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/kyi0_2D.last10 2D_data 
+echo "phys eirc d 'd_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/d_2D.last10 2D_data 
+	
+	
 
 # ======================================= te =========================================== #
 	# temperature
@@ -37,6 +77,8 @@ echo "tab2 'tab2_2D.last10' mprt" | b2plot;
  mv b2pl.exe.dir/tab2_2D.last10 2D_data
 echo "tmb2 'tmb2_2D.last10' mprt" | b2plot;
  mv b2pl.exe.dir/tmb2_2D.last10 2D_data
+echo "cte 'cte_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/cte_2D.last10 2D_data 
+
 
 # ====================================== density ======================================== #
 	# density
@@ -55,7 +97,7 @@ echo "eirc pr 'pr_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/pr_2D.last10 2D_data
 echo "eirc p* 'pt_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/pt_2D.last10 2D_data
 echo "phys pr ddx  'gp_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/gp_2D.last10 2D_data	
 echo "phys p* ddx  'gpt_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/gpt_2D.last10 2D_data	
-	
+echo "eirc pz 'pz_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/pz_2D.last10 2D_data
 
 # ===================================== force =========================================== #	
 	# force
@@ -74,33 +116,26 @@ echo "po ddy 'Er_2D.last10' mprt" | b2plot;
 echo "po  'po_2D.last10' mprt" | b2plot;
  mv b2pl.exe.dir/po_2D.last10 2D_data
 # =====================================  velocity ======================================== #
-echo "up 1 zsel 'vp_2D.last10' mprt" | b2plot;
- mv b2pl.exe.dir/vp_2D.last10 2D_data
-echo "vv 1 zsel 'vr_2D.last10' mprt" | b2plot;
- mv b2pl.exe.dir/vr_2D.last10 2D_data
-echo "ww 1 zsel 'vz_2D.last10' mprt" | b2plot;
- mv b2pl.exe.dir/vz_2D.last10 2D_data
-echo "ua 1 zsel 'ua_2D.last10' mprt" | b2plot;
- mv b2pl.exe.dir/ua_2D.last10 2D_data
- echo "phys eirc mach 'mach_2D.last10' mprt " | b2plot ;
- mv b2pl.exe.dir/mach_2D.last10 2D_data
+#echo "up 1 zsel 'vp_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/vp_2D.last10 2D_data
+#echo "vv 1 zsel 'vr_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/vr_2D.last10 2D_data
+echo "ww 1 zsel 'vz_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/vz_2D.last10 2D_data
+echo "ua 1 zsel 'ua_2D.last10' mprt" | b2plot;mv b2pl.exe.dir/ua_2D.last10 2D_data
+echo "phys eirc mach 'mach_2D.last10' mprt " | b2plot ;mv b2pl.exe.dir/mach_2D.last10 2D_data
 
 # ======================================= mass density ==================================== #
-echo "phys eirc ro 'ro_2D.last10' mprt " | b2plot ;
-mv b2pl.exe.dir/ro_2D.last10 2D_data
+#echo "phys eirc ro 'ro_2D.last10' mprt " | b2plot ;mv b2pl.exe.dir/ro_2D.last10 2D_data
 
 ## combination
 
 # ========================================= radiation ===================================== #
 	# carbon radiation of every layer
-echo "phys eirc b2ra b2br m+ 'b2rabr_2D.last10' mprt " | b2plot ;
-mv b2pl.exe.dir/b2rabr_2D.last10 2D_data
+echo "phys eirc b2ra b2br m+ 'b2rabr_2D.last10' mprt " | b2plot ;mv b2pl.exe.dir/b2rabr_2D.last10 2D_data
 	# total radiation
 echo "phys brna 0.0 rmma pot m* 0 0 sumz ev rm* -1.0 rm* brhe m- b2ra 0 0 sumz m+ b2br 0 0 sumz m+ 'rad_dc_2D.last10' mprt " | b2plot ;
 mv b2pl.exe.dir/rad_dc_2D.last10 2D_data
    	 # total carbon radiation
-echo "phys b2ra 2 8 sumz b2br 2 8 sumz m+ 'rad_c_2D.last10' mprt " | b2plot ;
-mv b2pl.exe.dir/rad_c_2D.last10 2D_data
+#echo "phys b2ra 2 8 sumz b2br 2 8 sumz m+ 'rad_c_2D.last10' mprt " | b2plot ;
+#mv b2pl.exe.dir/rad_c_2D.last10 2D_data
 
 # ======================================== flux ============================================ #
 	# q_dep
@@ -125,11 +160,20 @@ mv b2pl.exe.dir/f_par_2D.last10 2D_data
 echo "phys eirc fnax 0 0 sumz psxperp pit m/ 6.24e22 rm/  'jsat_2D.last10' mprt " | b2plot ;
 mv b2pl.exe.dir/jsat_2D.last10 2D_data
 # ============================  neutral pressure =================================== #
- echo "phys eirc dab2 abs 0 zsel eirc tab2 abs 0 zsel m*  eirc dab2 abs 2 zsel eirc tab2 abs 2 zsel m* m+ eirc dab2 abs 1 zsel eirc tab2 abs 1 zsel m* m+   1.6e19 rm/ 'pneu_c_2D.last10' mprt" | b2plot; 
- mv b2pl.exe.dir/pneu_c_2D.last10 2D_data
+ echo "phys eirc dab2 abs 0 zsel eirc tab2 abs 0 zsel m*  eirc dab2 abs 2 zsel eirc tab2 abs 2 zsel m* m+ eirc dab2 abs 1 zsel eirc tab2 abs 1 zsel m* m+   1.6e19 rm/ 'neu_pr_2D.last10' mprt" | b2plot; 
+ mv b2pl.exe.dir/neu_pr_2D.last10 2D_data
+# ============================  cornal equilibrium  =================================== #
+echo "phys eirc coni 'coni_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/coni_2D.last10 2D_data 
+echo "phys eirc cora 'cora_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/cora_2D.last10 2D_data 
 
-
-
-
+# ============================ electron cooling rate =============================== #
+echo "phys eirc rqae 'rqae_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/rqae_2D.last10 2D_data 
+	
+# ============================ ionization energy =================================== #
+echo "phys eirc poti 'poti_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/poti_2D.last10 2D_data 
+	
+# ============================ collsion frequency ================================== #
+echo "phys eirc nua 'nua_2D.last10' mprt" | b2plot;mv  b2pl.exe.dir/nua_2D.last10 2D_data 
+	
 
 
