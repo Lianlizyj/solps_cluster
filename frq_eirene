@@ -1,0 +1,16 @@
+#!/bin/bash
+
+## function: modify the eirene code callback times per step
+n_cpu=`grep -o 'CPU' b2.neutrals.parameters |wc -l`
+
+echo "${n_cpu}"
+if [ ${n_cpu} -eq 0 ]
+then
+	sed -i 's/\&NEUTRALS/\&NEUTRALS\n EIRENE_STEP_CPU=300,\n EIRENE_MOD=8,/' b2.neutrals.parameters
+	echo "b2.neutrals.parameters has been modified!"
+	sed -n '1,3p' b2.neutrals.parameters
+else
+    	echo "b2.neutrals.parameters has been modified!"
+	echo "Please don't modify again!"
+	sed -n '1,3p' b2.neutrals.parameters
+fi
