@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# sepcify the father path of case cluster
+path=${1}
+# specify the string, containning in casename
+
+if [ $# -lt 1 ] ; then
+	echo "Default method is seleted."
+	path=`pwd`
+	cn='fnay'
+	#exit 0
+elif [ $# -gt 1 ]; then
+	cn=${2}
+else	
+	cn='fnay' # default value
+fi
+
+
+# get the case_namelist, which you want to read 
+rm para_namelist &>  /dev/null
+
+#ls ${path} | awk '/'${cn}'/ {print $0}' > case_namelist
+ls ${path} | grep ${cn} > para_namelist
+
+# create the default file #
+rm core_flux &> /dev/null 
+touch core_flux
+
+while read -r para_name
+do
+	para_path="${path}/${para_name}"
+	if [ -f ${para_path} ]
+	then
+		# ====== callback your scripts in here ======== #
+			# get the intgeral core flux #
+		#echo ${para_path}
+		var_spe=`tac ${para_path} | awk 'NR==2 {print}' | awk '{for (i=2;i<=NF;i++)print $(i)}' | sed -n '26,73p' | awk '{sum +=$1};END {printf("%12.6e\n"),sum}'`
+		#echo ${var_spe}
+			# get the species index
+		ind_spe=`echo ${para_name} | cut -d _ -f 2 | cut -d . -f 1`
+		#echo ${ind_spe}
+			# store the var
+		echo "${ind_spe} ${var_spe}"| awk '{printf("%8s: %12.5e\n",$1,$2)}' >> core_flux
+		# ============================================= #
+	else
+		echo "Please check ${para_name}, which is no a file."
+	fi
+	# ========== sort the int flux =========== #
+done < para_namelist
+
+echo -e "The intgeral core flux for per particle:"
+less core_flux | sort -h
